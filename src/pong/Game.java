@@ -15,22 +15,50 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	
 	private static final long serialVersionUID = 1L;
 	public static int WIDTH = 160;
-	public static int HEIGHT = 120;
+	public static int HEIGHT = 230;
 	public static int SCALE = 3;
+	private static boolean isRunning = true;
+	private static int ganhador;
 	
 	public BufferedImage layer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	
 	public static Player player;
 	public static Enemy enemy;
 	public static Ball ball;
-	
+	public static Placar placar;
+		
 	public Game() {
 		this.setPreferredSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
 		this.addKeyListener(this);
 		
-		player = new Player(100, HEIGHT-5);
-		enemy = new Enemy(100, 0);
-		ball = new Ball(100, HEIGHT/2 - 1);
+		player = new Player(80-15, HEIGHT-5);
+		enemy = new Enemy(80-15, 90);
+		ball = new Ball(80, ((230-100)/2) + 90);
+		placar = new Placar(0,0);
+		ganhador = 0;
+	}
+	
+	public static void restartGame(int jogador) {
+		if(jogador == 1) {
+			placar.Pjog1++;
+			if(placar.Pjog1 == 3) {
+				ganhador = 1;
+			}
+		}
+		else {
+			placar.Pjog2++;
+			if(placar.Pjog2 == 3) {
+				ganhador = 2;
+			}
+		}
+		player.x = 80-15;
+		player.y = HEIGHT-5;
+		enemy.x = 80-15;
+		enemy.y = 90;
+		ball.x = 80-2;
+		ball.y = ((230-100)/2)+90;
+		ball.speed = 0.0;
+		ball.dx = 0;
 	}
 
 	public static void main(String[] args) {
@@ -50,6 +78,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		player.tick();
 		enemy.tick();
 		ball.tick();
+		placar.tick();
 	}
 	
 	public void render() {
@@ -60,12 +89,15 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		}
 		
 		Graphics g = layer.getGraphics();
+		//Fundo
 		g.setColor(Color.black);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		player.render(g);
 		enemy.render(g);
 		ball.render(g);
-		
+		placar.render(g);
+		if(ganhador != 0)
+			placar.finishRender(g, ganhador);
 		
 		g = bs.getDrawGraphics();		
 		g.drawImage(layer, 0, 0, WIDTH*SCALE, HEIGHT*SCALE, null);
@@ -74,16 +106,16 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		
 	@Override
 	public void run() {
-		while(true) {
+		requestFocus();
+		while(isRunning) {
 			tick();
 			render();
 			try {
-				Thread.sleep(1000/240);
+				Thread.sleep(1000/120);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 
 	@Override
@@ -93,6 +125,26 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 			player.left = true;
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+			if(ganhador != 0) {
+				ganhador = 0;
+				placar.Pjog1 = 0;
+				placar.Pjog2 = 0;				
+			}
+			ball.speed = 1;
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			isRunning = false;
+			System.exit(1);
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_UP) {
+			if(placar.diff < 9)
+				placar.diff ++;
+		}
+		else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+			if(placar.diff > 1)
+				placar.diff --;
 		}
 		
 	}
