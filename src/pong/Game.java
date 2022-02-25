@@ -41,14 +41,14 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public static void restartGame(int jogador) {
 		if(jogador == 1) {
 			placar.Pjog1++;
-			if(placar.Pjog1 == 3) {
+			if(placar.Pjog1 == 5) {
 				ganhador = 1;
 				Sound.winComput.play(Sound.effectsVolume);
 			}
 		}
 		else {
 			placar.Pjog2++;
-			if(placar.Pjog2 == 3) {
+			if(placar.Pjog2 == 5) {
 				ganhador = 2;
 				Sound.winPlayer.play(Sound.effectsVolume);
 			}
