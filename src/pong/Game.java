@@ -43,12 +43,14 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			placar.Pjog1++;
 			if(placar.Pjog1 == 3) {
 				ganhador = 1;
+				Sound.winComput.play(Sound.effectsVolume);
 			}
 		}
 		else {
 			placar.Pjog2++;
 			if(placar.Pjog2 == 3) {
 				ganhador = 2;
+				Sound.winPlayer.play(Sound.effectsVolume);
 			}
 		}
 		player.x = 80-15;
@@ -133,6 +135,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 				placar.Pjog2 = 0;				
 			}
 			ball.speed = 1;
+			//Sound.backgroundMusic.play(Sound.musicVolume);
 		}
 		else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			isRunning = false;

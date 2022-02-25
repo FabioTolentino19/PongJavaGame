@@ -32,20 +32,26 @@ public class Ball {
 	public void tick() {
 		
 		if(x+(dx*speed) + width >= Game.WIDTH) {
-			dx *= -1;									
+			dx *= -1;
+			Sound.ballbeep8.play(Sound.effectsVolume);
 		} else if(x+(dx*speed) < 0) {
 			dx *= -1;
+			Sound.ballbeep8.play(Sound.effectsVolume);
 		}
 		
 		if(y >= Game.HEIGHT )
 		{
 			//Ponto do inimigo
 			//new Game();
+			//Sound.backgroundMusic.stop();
+			Sound.goalComput.play(Sound.effectsVolume);
 			Game.restartGame(1);
 			return;
 		} else if(y < 80) {
 			//Ponto do jogador
 			//new Game();
+			//Sound.backgroundMusic.stop();
+			Sound.goalPlayer.play(Sound.effectsVolume);
 			Game.restartGame(2);
 			return;
 		}
@@ -57,14 +63,16 @@ public class Ball {
 				
 		if(bounds.intersects(boundsPlayer)) {
 			crash = bounds.intersection(boundsPlayer);
-			atingido = crash.x - boundsPlayer.x - boundsPlayer.width/2 ;
+			atingido = crash.x - boundsPlayer.x - boundsPlayer.width/2;
 			dx = .1 * atingido;
 			dy *= -1;
+			Sound.ballbeep0.selectBeep(atingido);
 		} else if(bounds.intersects(boundsEnemy)) {
 			crash = bounds.intersection(boundsEnemy);
 			atingido = crash.x - boundsEnemy.x - boundsEnemy.width/2;
 			dx = .1 * atingido;
 			dy *= -1;
+			Sound.ballbeep0.selectBeep(atingido);
 		}
 		
 		x += dx*speed;
