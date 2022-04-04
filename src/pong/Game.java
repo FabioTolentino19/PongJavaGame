@@ -19,6 +19,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public static int SCALE = 3;
 	private static boolean isRunning = true;
 	private static int ganhador;
+	private static int maxPoints = 10;
 	
 	public BufferedImage layer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	
@@ -39,20 +40,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	}
 	
 	public static void restartGame(int jogador) {
-		if(jogador == 1) {
-			placar.Pjog1++;
-			if(placar.Pjog1 == 5) {
-				ganhador = 1;
-				Sound.winComput.play(Sound.effectsVolume);
-			}
-		}
-		else {
-			placar.Pjog2++;
-			if(placar.Pjog2 == 5) {
-				ganhador = 2;
-				Sound.winPlayer.play(Sound.effectsVolume);
-			}
-		}
 		player.x = 80-15;
 		player.y = HEIGHT-5;
 		enemy.x = 80-15;
@@ -61,6 +48,25 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		ball.y = ((230-100)/2)+90;
 		ball.speed = 0.0;
 		ball.dx = 0;
+		if(jogador == 1) {
+			placar.Pjog1++;
+			if(placar.Pjog1 == maxPoints) {
+				ganhador = 1;
+				try {
+		    		 Thread.sleep(100);
+		    		 } catch (InterruptedException e){System.out.println(e);}
+				Sound.winComput.play(Sound.effectsVolume);
+			}
+		} else {
+			placar.Pjog2++;
+			if(placar.Pjog2 == maxPoints) {
+				ganhador = 2;
+				try {
+		    		 Thread.sleep(100);
+		    		 } catch (InterruptedException e){System.out.println(e);}
+				Sound.winPlayer.play(Sound.effectsVolume);
+			}
+		}
 	}
 
 	public static void main(String[] args) {
